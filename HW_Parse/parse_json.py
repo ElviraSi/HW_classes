@@ -1,4 +1,5 @@
 import json
+import collections
 
 with open("newsafr.json", "r", encoding="utf-8") as f:
     reader = json.load(f)
@@ -7,18 +8,10 @@ with open("newsafr.json", "r", encoding="utf-8") as f:
     for r_elem in r_list:
         l = r_elem['description']
         words_list.extend(l.split())
+    words_list = [x.lower() for x in words_list]
     words_list_upd = []
     for i in words_list:
-        if len(i) >= 6:
+        if len(i) > 6:
             words_list_upd.append(i)
-    words_dict = {}.fromkeys(words_list_upd, 0)
-    for word in words_list_upd:
-        words_dict[word] += 1
-    words_dict_upd = {}
-    for key, value in words_dict.items():
-        words_dict_upd[value] = key
-    for k in sorted(words_dict_upd.keys(), reverse=True)[:10]:
-        if k % 10 == 2 or k % 10 == 3 or k % 10 == 4:
-            print(f'Слово "{words_dict_upd[k]}" повторяется {k} раза.')
-        else:
-            print(f'Слово "{words_dict_upd[k]}" повторяется {k} раз.')
+    count_w = collections.Counter(words_list_upd).most_common(10)
+    print(count_w)
